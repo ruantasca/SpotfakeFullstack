@@ -1,93 +1,93 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, Pressable } from 'react-native';
+import React from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
-export default function SignUp() {
-    const [email, setEmail] = useState('');
-    const [nome, setNome] = useState('');
-    const [senha, setSenha] = useState('');
+const LoginScreen = ({ navigation }) => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.innerContainer}>
+        <Text style={styles.title}>Login</Text>
 
-    const registrarUsuario = () => {
-        console.log(nome, email, senha);
-    };
+        <Text style={styles.label}>Email:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite seu email"
+          placeholderTextColor="#FFF"
+        />
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <View>
-                <Text style={styles.title}>Registro</Text>
-            </View>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => setEmail(text)}
-                    value={email}
-                    placeholder="Insira seu Nome"
-                />
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => setNome(text)}
-                    value={nome}
-                    placeholder="Insira seu Email"
-                />
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => setSenha(text)}
-                    value={senha}
-                    placeholder="Insira sua senha"
-                    secureTextEntry={true}
-                    placeholderTextColor="#232F3E" 
-                />
-            </View>
-            <View>
-                <Pressable style={styles.button} onPress={registrarUsuario}>
-                    <Text style={styles.buttonText}>Cadastrar</Text>
-                </Pressable>
-            </View>
-        </SafeAreaView>
-    );
-}
+        <Text style={styles.label}>Senha:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite sua senha"
+          secureTextEntry={true}
+          placeholderTextColor="#FFF"
+        />
+
+        <View style={styles.forgotPasswordContainer}>
+          <Button
+            title="Esqueci senha"
+            color="#2e23ca"
+            onPress={() => navigation.navigate('EsqueciSenha')}
+          />
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Entrar"
+            color="#2e23ca"
+            onPress={() => { /* lógica de login */ }}
+          />
+        </View>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#240e65', 
-        borderColor: '#FFFFF', 
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 20,
-    },
-    inputContainer: {
-        backgroundColor: '#2e23ca', 
-        padding: 20,
-        borderRadius: 10,
-    },
-    input: {
-        borderColor: '#FF9900',
-        width: '80%',
-        margin: 10,
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 10,
-        fontSize: 18,
-        backgroundColor: '#FFFF', 
-        color: '#000000',  
-    },
-    title: {
-        fontSize: 42,
-        fontWeight: 'bold',
-        color: '#FFFF', 
-        marginBottom: 20,
-    },
-    button: {
-        backgroundColor: '#FFFF', 
-        padding: 16,
-        borderRadius: 2,
-        marginTop: 20,
-        width: '100%',
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: '#fffff', 
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#1d0073', 
+    padding: 20, 
+  },
+  innerContainer: {
+    flex: 1,
+    backgroundColor: '#240e65', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 20,
+  },
+  title: {
+    fontSize: 32,
+    color: '#FFF',
+    marginBottom: 30,
+  },
+  label: {
+    fontSize: 18,
+    color: '#FFF',
+    alignSelf: 'flex-start',
+    marginLeft: 20,
+    marginTop: 10,
+  },
+  input: {
+    width: '100%',
+    height: 40,
+    borderColor: '#2e23ca',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginVertical: 10,
+    color: '#FFF',
+    backgroundColor: '#1d0073',
+  },
+  forgotPasswordContainer: {
+    marginVertical: 10,
+    width: '100%',
+  },
+  buttonContainer: {
+    marginTop: 20,
+    width: '100%',
+    borderRadius: 10,
+  },
 });
+
+export default LoginScreen;
