@@ -1,9 +1,12 @@
 import Express  from "express";
 import { User } from "./db.js";
 import bryptjs from "bcryptjs"
+import  jsonwebtoken from "jsonwebtoken";
+import cors from "cors";
 
-const app = Express ()
+const app = Express () 
 app.use(Express.json())
+app.use(cors())
 //criarTabelas()
 
 //------registro
@@ -20,15 +23,10 @@ app.post('/registro', async (req, res) => {
         return
         
     }
-
     const senhaCriptografada = bryptjs.hashSync(senha, 10)
-
     const teste = await User.create({nome, sobrenome, email, senha: senhaCriptografada, dataNascimento})
+})
 
-
-    console.log(email)
-    res.send('usuario criado')
-}) 
 
 //------login
 app.post('/login', async (req, res) => {
@@ -50,8 +48,25 @@ app.post('/login', async (req, res) => {
         return
     }
 
-    console.log(email)
-    res.send('usuario logado')
-}) 
+    const token = jsonwebtoken.sign(
+        {"nome_completo" :`${userExiste.nome} ${userExiste.sobrenome}`,
+        "email": userExiste.email,
+        "status": userExiste.status
+        
+    },
+        'chavecriptografiajwt',
+        {expiresIn: 1000*60*5 }
+    )
+
+    
+
+    console.log(token)
+    res.send({
+        "msg": "ok usuario criado",
+        "tokenJWT": token
+        })
+
+    })
+     
 //-----porta
 app.listen(8000)

@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     color: '#FFF',
     marginBottom: 30,
+    fontFamily: 'Jolly Lodger',
   },
   label: {
     fontSize: 18,
@@ -54,6 +55,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginLeft: 20,
     marginTop: 10,
+    fontFamily: 'Jolly Lodger',
   },
   input: {
     width: '100%',
