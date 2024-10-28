@@ -1,56 +1,103 @@
-import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { Link } from 'expo-router';
+import { useFonts } from "expo-font";
 
-const LoginScreen = ({ navigation }) => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.innerContainer}>
-        <Text style={styles.title}>Login</Text>
-        <Text style={styles.label}>Email:</Text>
-        <TextInput style={styles.input} placeholder="Digite seu email" placeholderTextColor="#FFF" />
-        
-        <Text style={styles.label}>Senha:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite sua senha"
-          secureTextEntry={true}
-          placeholderTextColor="#FFF"
-        />
+const LoginScreen = () => {
 
-        <TouchableOpacity onPress={() => navigation.navigate('EsqueciSenha')}>
-          <Text style={styles.forgotPassword}>Esqueci senha</Text>
-        </TouchableOpacity>
+  const [loaded, error] = useFonts({
+    'JollyLodger': require('../assets/fonts/JollyLodger-Regular.ttf'),
+  });
 
-        <View style={styles.buttonContainer}>
-          <Button title="Entrar" color="#2e23ca" onPress={() => { }} />
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+
+  const handlelogar = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "*/*",
+        },
+        body: JSON.stringify({
+          "email": email,
+          "senha": senha,
+        }),
+      });
+
+      const message = await response.text();
+      alert(message);
+
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("Erro ao logar usuário");
+    }
+  }
+    return (
+      <View style={styles.container}>
+        <View style={styles.innerContainer}>
+          <Text style={styles.title}>Login</Text>
+          <Text style={styles.label}>Email:</Text>
+          <TextInput style={styles.input} 
+            placeholder="Digite seu email" 
+            placeholderTextColor="#FFF" 
+            value={email}
+            onChangeText={setEmail}
+          />
+
+          <Text style={styles.label}>Senha:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Digite sua senha"
+            secureTextEntry={true}
+            placeholderTextColor="#FFF"
+            value={senha}
+            onChangeText={setSenha}
+          />
+
+
+          <Text style={styles.forgotPassword} onPress={() => navigation.navigate('EsqueciSenha')}>
+            Esqueci senha
+          </Text>
+
+          <Link href={`http://localhost:8081/Registro`}>
+            <Text style={styles.forgotPassword}>
+              cadastrar-se
+            </Text>
+          </Link>
+
+          <View style={styles.buttonContainer}>
+            <Button title="Entrar" color="#2e23ca" onPress={handlelogar} />
+          </View>
         </View>
       </View>
-    </View>
-  );
+    )
 };
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1d0073', // Cor da borda externa
-    padding: 20, // Borda de 20px
+    backgroundColor: '#1d0073',
+    padding: 20,
   },
   innerContainer: {
     flex: 1,
-    backgroundColor: '#240e65', // Cor de fundo interna
+    backgroundColor: '#240e65',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
     padding: 20,
   },
   title: {
-    fontSize: 32,
+    fontSize: 52,
     color: '#FFF',
     marginBottom: 30,
-    fontFamily: 'Jolly Lodger',
+    fontFamily: 'Jolly Lodger'
   },
   label: {
-    fontSize: 18,
+    fontSize: 28,
     color: '#FFF',
     alignSelf: 'flex-start',
     marginLeft: 20,
@@ -78,6 +125,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: '100%',
     borderRadius: 10,
+    fontFamily: 'Jolly Lodger',
   },
 });
 

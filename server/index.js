@@ -25,6 +25,8 @@ app.post('/registro', async (req, res) => {
     }
     const senhaCriptografada = bryptjs.hashSync(senha, 10)
     const teste = await User.create({nome, sobrenome, email, senha: senhaCriptografada, dataNascimento})
+
+    res.send("usuario criado com sucesso")
 })
 
 
@@ -58,15 +60,7 @@ app.post('/login', async (req, res) => {
         {expiresIn: 1000*60*5 }
     )
 
-    
-
-    console.log(token)
-    res.send({
-        "msg": "ok usuario criado",
-        "tokenJWT": token
-        })
-
-    })
-     
+    res.send('Usuário logado com sucesso')
+})
 //-----porta
-app.listen(8000)
+app.listen(8000);

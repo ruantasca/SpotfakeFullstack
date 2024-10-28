@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { router } from 'expo-router';
 import {Link} from 'expo-router';
 
 const CadastroScreen = ({ navigation }) => {
@@ -9,7 +10,6 @@ const CadastroScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [dataNascimento, setDataNascimento] = useState('');
-    const [signupStatus, setSingupStatus] = useState("/registro")
 
   const handleSubmit = async () => {
     try {
@@ -30,10 +30,15 @@ const CadastroScreen = ({ navigation }) => {
 
         const message = await response.text();
         alert(message);
+
+        if (message === "usuario criado com sucesso"){
+          router.push("/Login")
+        }
+
     } catch (error) {
         console.error('Error during signup:', error);
         alert('Erro ao criar usuário');
-    }
+    } 
 };
 
   return (
@@ -87,13 +92,20 @@ const CadastroScreen = ({ navigation }) => {
           onChangeText={setPassword}
         />
 
+        <Link href={`http://localhost:8081/Login`}>
+          <Text style={styles.forgotPassword}>
+          Ja tem conta?
+          </Text>
+        </Link>
+
         <View style={styles.buttonContainer}>
           <Button
             title="Cadastrar"
             color="#2e23ca"
             onPress={handleSubmit}
           />
-          
+   
+
         </View>
       </View>
     </View>
@@ -127,6 +139,12 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 10,
     fontFamily: 'Jolly Lodger',
+  },
+  forgotPassword: {
+    color: '#FFF',
+    fontSize: 14,
+    marginVertical: 10,
+    textDecorationLine: 'underline',
   },
   input: {
     width: '100%',
