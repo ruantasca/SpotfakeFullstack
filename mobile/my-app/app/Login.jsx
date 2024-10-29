@@ -4,17 +4,19 @@ import { Link } from 'expo-router';
 import { useFonts } from "expo-font";
 
 const LoginScreen = () => {
-
+//fontes que usei
   const [loaded, error] = useFonts({
     'JollyLodger': require('../assets/fonts/JollyLodger-Regular.ttf'),
   });
-
+  //declarar as funções de emeil e senha que colocamos na caixa de texto
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
+  //ao clicar em logar se der certo ele manda para outra pagina.
+  //se der errado ele manda uma mensagem de erro
   const handlelogar = async () => {
     try {
-      const response = await fetch("http://localhost:8000/login", {
+      const response = await fetch("http://localhost:8000/Home", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,6 +30,10 @@ const LoginScreen = () => {
 
       const message = await response.text();
       alert(message);
+
+      if (message === "usuario logado com sucesso"){
+        router.push("/Homejsx")
+      }
 
     } catch (error) {
       console.error("Error during login:", error);

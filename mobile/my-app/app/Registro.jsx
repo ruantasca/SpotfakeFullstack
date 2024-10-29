@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import {Link} from 'expo-router';
 
-const CadastroScreen = ({ navigation }) => {
+const CadastroScreen = () => {
   
     const [nome, setNome] = useState('');
     const [sobreNome, setSobreNome] = useState('');

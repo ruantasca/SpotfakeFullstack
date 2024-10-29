@@ -8,7 +8,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
-        <Image source={require('./logo.png')} style={styles.logo} />
+        <Image source={require('./img/logo.png')} style={styles.logo} />
         
         {/* Botão de Login */}
         <View style={styles.buttonContainer}>
