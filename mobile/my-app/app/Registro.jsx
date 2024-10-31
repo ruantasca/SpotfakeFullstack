@@ -13,7 +13,7 @@ const CadastroScreen = () => {
 
   const handleSubmit = async () => {
     try {
-        const response = await fetch('http://localhost:8000/registro', {
+        const response = await fetch('http://localhost:8000/autenticacao/registro', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ const CadastroScreen = () => {
         const message = await response.text();
         alert(message);
 
-        if (message === "usuario criado com sucesso"){
+        if (message === "Usuário registrado com sucesso!"){
           router.push("/Login")
         }
 

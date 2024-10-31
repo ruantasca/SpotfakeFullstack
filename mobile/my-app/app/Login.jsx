@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { useFonts } from "expo-font";
 
 const LoginScreen = () => {
@@ -16,7 +16,7 @@ const LoginScreen = () => {
   //se der errado ele manda uma mensagem de erro
   const handlelogar = async () => {
     try {
-      const response = await fetch("http://localhost:8000/Home", {
+      const response = await fetch("http://localhost:8000/autenticacao/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,8 +31,8 @@ const LoginScreen = () => {
       const message = await response.text();
       alert(message);
 
-      if (message === "usuario logado com sucesso"){
-        router.push("/Homejsx")
+      if (message === "Usuário autenticado com sucesso!"){
+        router.push("/Home")
       }
 
     } catch (error) {
