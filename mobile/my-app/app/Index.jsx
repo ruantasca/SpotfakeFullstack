@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, Image, Button, StyleSheet, Pressable } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
+  
 });
 
 export default HomeScreen;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, Pressable } from 'react-native';
-import { router } from 'expo-router';
+import { router, Link } from 'expo-router';
 
 
 const Home = () => {
@@ -8,7 +8,11 @@ const Home = () => {
     <View style={styles.container}>
       
       <View style={styles.sidebar}>
-        
+        <Link href={`http://localhost:8081/Perfil`}>
+          <Pressable>
+          <Image source={require('./img/perfil.png')} style={styles.perfil1}/>
+          </Pressable>
+          </Link>
       </View>
 
       
@@ -18,6 +22,9 @@ const Home = () => {
           <TextInput style={styles.searchInput} placeholder="Search" placeholderTextColor="#AAA" />
           <Pressable style={styles.settingsButton}>
             <Text style={styles.settingsText}>⚙️</Text>
+          </Pressable>
+          <Pressable>
+            <Image source={require('./img/perfil.png')} style={styles.perfil}/>
           </Pressable>
         </View>
 
@@ -53,7 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1d0073',
   },
   sidebar: {
-    width: '15%',
+    width: '10%',
     backgroundColor: '#3a1c94',
     alignItems: 'center',
     paddingTop: 20,
@@ -133,6 +140,16 @@ const styles = StyleSheet.create({
   controlButton: {
     fontSize: 20,
     color: '#FFF',
+  },
+  perfil:{
+
+    width: 20,
+    height: 20,
+  },
+  perfil1:{
+
+    width: 60,
+    height: 60,
   },
 });
 

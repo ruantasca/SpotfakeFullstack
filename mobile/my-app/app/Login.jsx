@@ -4,7 +4,7 @@ import { Link, router } from 'expo-router';
 import { useFonts } from "expo-font";
 
 const LoginScreen = () => {
-//fontes que usei
+//fonte
   const [loaded, error] = useFonts({
     'JollyLodger': require('../assets/fonts/JollyLodger-Regular.ttf'),
   });
