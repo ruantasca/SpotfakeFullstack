@@ -52,7 +52,13 @@ const autenticarUsuario = async (req, res) => {
         { expiresIn: 1000 * 60 * 5 }
     );
 
-    res.send('Usuário autenticado com sucesso!');
+    if (usuarioExistente.nome === "adm" && usuarioExistente.email === "adm"){
+        res.send('Adm logado')
+    }
+    else{
+            res.send('Usuário autenticado com sucesso!')
+        }
+    
 };
 
 export { registrarUsuario, autenticarUsuario };

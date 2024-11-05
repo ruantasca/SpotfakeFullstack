@@ -4,7 +4,7 @@ import { Link, router } from 'expo-router';
 import { useFonts } from "expo-font";
 
 const LoginScreen = () => {
-//fonte
+  //fonte
   const [loaded, error] = useFonts({
     'JollyLodger': require('../assets/fonts/JollyLodger-Regular.ttf'),
   });
@@ -31,54 +31,56 @@ const LoginScreen = () => {
       const message = await response.text();
       alert(message);
 
-      if (message === "Usuário autenticado com sucesso!"){
+      if (message === "Usuário autenticado com sucesso!") {
         router.push("/Home")
       }
-
+      else if (message === "Adm logado") {
+        router.push("/Admin")
+      }
     } catch (error) {
       console.error("Error during login:", error);
       alert("Erro ao logar usuário");
     }
   }
-    return (
-      <View style={styles.container}>
-        <View style={styles.innerContainer}>
-          <Text style={styles.title}>Login</Text>
-          <Text style={styles.label}>Email:</Text>
-          <TextInput style={styles.input} 
-            placeholder="Digite seu email" 
-            placeholderTextColor="#FFF" 
-            value={email}
-            onChangeText={setEmail}
-          />
+  return (
+    <View style={styles.container}>
+      <View style={styles.innerContainer}>
+        <Text style={styles.title}>Login</Text>
+        <Text style={styles.label}>Email:</Text>
+        <TextInput style={styles.input}
+          placeholder="Digite seu email"
+          placeholderTextColor="#FFF"
+          value={email}
+          onChangeText={setEmail}
+        />
 
-          <Text style={styles.label}>Senha:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Digite sua senha"
-            secureTextEntry={true}
-            placeholderTextColor="#FFF"
-            value={senha}
-            onChangeText={setSenha}
-          />
+        <Text style={styles.label}>Senha:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite sua senha"
+          secureTextEntry={true}
+          placeholderTextColor="#FFF"
+          value={senha}
+          onChangeText={setSenha}
+        />
 
 
-          <Text style={styles.forgotPassword} onPress={() => navigation.navigate('EsqueciSenha')}>
-            Esqueci senha
+        <Text style={styles.forgotPassword} onPress={() => navigation.navigate('EsqueciSenha')}>
+          Esqueci senha
+        </Text>
+
+        <Link href={`http://localhost:8081/Registro`}>
+          <Text style={styles.forgotPassword}>
+            cadastrar-se
           </Text>
+        </Link>
 
-          <Link href={`http://localhost:8081/Registro`}>
-            <Text style={styles.forgotPassword}>
-              cadastrar-se
-            </Text>
-          </Link>
-
-          <View style={styles.buttonContainer}>
-            <Button title="Entrar" color="#2e23ca" onPress={handlelogar} />
-          </View>
+        <View style={styles.buttonContainer}>
+          <Button title="Entrar" color="#2e23ca" onPress={handlelogar} />
         </View>
       </View>
-    )
+    </View>
+  )
 };
 
 

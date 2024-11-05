@@ -23,9 +23,12 @@ const Home = () => {
           <Pressable style={styles.settingsButton}>
             <Text style={styles.settingsText}>⚙️</Text>
           </Pressable>
+          <Link href={`http://localhost:8081/Perfil`}>
+          
           <Pressable>
             <Image source={require('./img/perfil.png')} style={styles.perfil}/>
           </Pressable>
+          </Link>
         </View>
 
         
