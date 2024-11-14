@@ -1,4 +1,3 @@
-// EsqueciSenhaScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { router } from 'expo-router';
@@ -20,7 +19,7 @@ const EsqueciSenhaScreen = () => {
       Alert.alert("Redefinição de Senha", message);
 
       if (response.ok) {
-        router.push('/Login'); // Volta para a tela de login após o envio
+        router.push('/Login');
       }
     } catch (error) {
       console.error("Erro ao solicitar redefinição de senha:", error);
@@ -35,6 +34,13 @@ const EsqueciSenhaScreen = () => {
       <TextInput
         style={styles.input}
         placeholder="Digite seu email"
+        placeholderTextColor="#FFF"
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Sua nova senha"
         placeholderTextColor="#FFF"
         value={email}
         onChangeText={setEmail}
