@@ -65,9 +65,9 @@ const LoginScreen = () => {
         />
 
 
-        <Text style={styles.forgotPassword} onPress={() => navigation.navigate('EsqueciSenha')}>
+      <Text style={styles.forgotPassword} onPress={() => router.push('http://localhost:8081/EsqueciSenhaScreen')}>
           Esqueci senha
-        </Text>
+       </Text>
 
         <Link href={`http://localhost:8081/Registro`}>
           <Text style={styles.forgotPassword}>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TextInput, ScrollView } from 'react-native';
 
+
 const Perfil = () => {
     const [nome, setNome] = useState('Seu nome');
     const [email, setEmail] = useState('seu email');
