@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 
 const EsqueciSenhaScreen = () => {
   const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
   const handleResetPassword = async () => {
     try {
@@ -42,8 +43,8 @@ const EsqueciSenhaScreen = () => {
         style={styles.input}
         placeholder="Sua nova senha"
         placeholderTextColor="#FFF"
-        value={email}
-        onChangeText={setEmail}
+        value={senha}
+        onChangeText={setSenha}
       />
       <View style={styles.buttonContainer}>
         <Button title="Enviar Solicitação" color="#2e23ca" onPress={handleResetPassword} />
