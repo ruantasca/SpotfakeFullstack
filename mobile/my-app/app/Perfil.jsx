@@ -1,78 +1,154 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, ScrollView } from 'react-native';
-
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, StyleSheet, TextInput, ScrollView, Pressable, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as ImagePicker from 'expo-image-picker';
 
 const Perfil = () => {
     const [nome, setNome] = useState('Seu nome');
     const [email, setEmail] = useState('seu email');
-    const [senha, setSenha] = useState('sua Senha');
-    const [dataNascimento, setDataNascimento] = useState('sua data de Nascimento');
+    const [senhaAtual, setSenhaAtual] = useState('');
+    const [novaSenha, setNovaSenha] = useState('');
+    const [dataNascimento, setDataNascimento] = useState('sua data de nascimento');
+    const [fotoPerfil, setFotoPerfil] = useState(null);
 
-    const fetchUserProfile = async (email) => {
+    // Carregar informações do AsyncStorage
+    useEffect(() => {
+        const carregarDados = async () => {
+            const storedFotoPerfil = await AsyncStorage.getItem('fotoPerfil');
+            if (storedFotoPerfil) {
+                setFotoPerfil(storedFotoPerfil);
+            }
+        };
+        carregarDados();
+    }, []);
+
+    const selecionarFoto = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Permissão necessária', 'Precisamos de permissão para acessar sua galeria.');
+            return;
+        }
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.cancelled) {
+            const fotoUri = result.uri;
+            setFotoPerfil(fotoUri);
+            await AsyncStorage.setItem('fotoPerfil', fotoUri);
+        }
+    };
+
+    const atualizarNome = async () => {
+        if (!nome) {
+            Alert.alert('Erro', 'Nome não pode estar vazio.');
+            return;
+        }
+
         try {
-            const response = await fetch('backand', {
-                method: 'POST',
+            const response = await fetch('http://localhost:8000/usuarios/update_name', {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({ nome, email }),
             });
-            const data = await response.json();
-            return data;
+
+            if (response.ok) {
+                Alert.alert('Sucesso', 'Nome atualizado com sucesso!');
+            } else {
+                Alert.alert('Erro', 'Não foi possível atualizar o nome.');
+            }
         } catch (error) {
-            console.error('Erro ao buscar o perfil:', error);
+            console.error('Erro ao atualizar nome:', error);
+            Alert.alert('Erro', 'Ocorreu um erro ao atualizar o nome.');
+        }
+    };
+
+    const atualizarSenha = async () => {
+        if (!senhaAtual || !novaSenha) {
+            Alert.alert('Erro', 'Preencha os campos de senha.');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:8000/usuarios/update_pass', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, senhaAtual, novaSenha }),
+            });
+
+            if (response.ok) {
+                Alert.alert('Sucesso', 'Senha atualizada com sucesso!');
+            } else {
+                Alert.alert('Erro', 'Não foi possível atualizar a senha.');
+            }
+        } catch (error) {
+            console.error('Erro ao atualizar senha:', error);
+            Alert.alert('Erro', 'Ocorreu um erro ao atualizar a senha.');
         }
     };
 
     return (
         <ScrollView style={styles.container}>
             <View style={styles.innerContainer}>
-                <Image source={require('./img/perfil.png')} style={styles.logo} />
+                {fotoPerfil ? (
+                    <Image source={{ uri: fotoPerfil }} style={styles.fotoPerfil} />
+                ) : (
+                    <Image source={require('./img/perfil.png')} style={styles.logo} />
+                )}
+
+                <Pressable onPress={selecionarFoto} style={styles.botao}>
+                    <Text style={styles.botaoTexto}>Alterar Foto de Perfil</Text>
+                </Pressable>
 
                 <View style={styles.inputContainer}>
                     <Text style={styles.label}>Nome:</Text>
                     <TextInput
                         style={styles.input}
                         value={nome}
-                        onChangeText={(text) => setNome(text)}
+                        onChangeText={setNome}
                         placeholder="Seu nome"
                         placeholderTextColor="#b0b0b0"
                     />
                 </View>
 
-                <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Email:</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={email}
-                        onChangeText={(text) => setEmail(text)}
-                        placeholder="Seu email"
-                        placeholderTextColor="#b0b0b0"
-                    />
-                </View>
+                <Pressable onPress={atualizarNome} style={styles.botao}>
+                    <Text style={styles.botaoTexto}>Atualizar Nome</Text>
+                </Pressable>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Senha:</Text>
+                    <Text style={styles.label}>Senha Atual:</Text>
                     <TextInput
                         style={styles.input}
-                        value={senha}
-                        onChangeText={(text) => setSenha(text)}
-                        placeholder="Sua senha"
+                        value={senhaAtual}
+                        onChangeText={setSenhaAtual}
+                        placeholder="Senha atual"
+                        placeholderTextColor="#b0b0b0"
+                        secureTextEntry
+                    />
+                </View>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Nova Senha:</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={novaSenha}
+                        onChangeText={setNovaSenha}
+                        placeholder="Nova senha"
                         placeholderTextColor="#b0b0b0"
                         secureTextEntry
                     />
                 </View>
 
-                <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Data de Nascimento:</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={dataNascimento}
-                        onChangeText={(text) => setDataNascimento(text)}
-                        placeholder="Sua data de nascimento"
-                        placeholderTextColor="#b0b0b0"
-                    />
-                </View>
+                <Pressable onPress={atualizarSenha} style={styles.botao}>
+                    <Text style={styles.botaoTexto}>Atualizar Senha</Text>
+                </Pressable>
             </View>
         </ScrollView>
     );
@@ -85,16 +161,20 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     innerContainer: {
-        flex: 1,
         backgroundColor: '#240e65',
-        justifyContent: 'center',
-        alignItems: 'center',
         borderRadius: 10,
         padding: 20,
+        alignItems: 'center',
     },
     logo: {
         width: 250,
         height: 250,
+        marginBottom: 20,
+    },
+    fotoPerfil: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
         marginBottom: 20,
     },
     inputContainer: {
@@ -114,6 +194,17 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         fontSize: 16,
         width: '100%',
+    },
+    botao: {
+        marginTop: 20,
+        backgroundColor: '#3e2ea6',
+        padding: 10,
+        borderRadius: 10,
+    },
+    botaoTexto: {
+        color: 'white',
+        fontSize: 16,
+        textAlign: 'center',
     },
 });
 
