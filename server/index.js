@@ -5,7 +5,7 @@ import { rotasUsuario } from "./router/userRoutes.js"
 import { criarTabelas } from "./db.js";
 
 const app = Express()
-// criarTabelas ()
+//criarTabelas ()
 app.use(Express.json())
 app.use(cors())
 app.use('/autenticacao', rotasAutenticacao)

@@ -37,7 +37,7 @@ const Perfil = () => {
         });
 
         if (!result.cancelled) {
-            const fotoUri = result.uri;
+            const fotoUri = result.assets[0].uri;
             setFotoPerfil(fotoUri);
             await AsyncStorage.setItem('fotoPerfil', fotoUri);
         }
