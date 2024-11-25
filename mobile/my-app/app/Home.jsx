@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, TextInput, Image, StyleSheet, Pressable } from 'react-native';
 import { router, Link } from 'expo-router';
+import { LoginContext } from "../scripts/LoginContext";
 
 
 const Home = () => {
+  const { foto } = useContext(LoginContext)
+
+  useEffect(() => {
+    alert(foto)
+  }, )
+  
+
   return (
     <View style={styles.container}>
       
       <View style={styles.sidebar}>
         <Link href={`http://localhost:8081/Perfil`}>
           <Pressable>
-          <Image source={require('./img/perfil.png')} style={styles.perfil1}/>
+          <Image source={{ uri: foto }} style={styles.perfil1}/>
           </Pressable>
           </Link>
       </View>
@@ -26,7 +34,7 @@ const Home = () => {
           <Link href={`http://localhost:8081/Perfil`}>
           
           <Pressable>
-            <Image source={require('./img/perfil.png')} style={styles.perfil}/>
+          <Image source={{ uri: foto }} style={styles.perfil1}/> 
           </Pressable>
           </Link>
         </View>

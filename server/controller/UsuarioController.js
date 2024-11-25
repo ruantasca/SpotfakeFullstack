@@ -33,5 +33,19 @@ const excluirUsuario = async (req, res) => {
         res.send("Usuário não encontrado.");
     }
 };
+    const trocarsenha = async (req, res) => {
+    const { email, senha } = req.body;
+    const user = await User.findOne({ where: { email: email } });
+    if (!user) {
+        res.send("Usuário não encontrado.")
+        return
+    }
 
-export { listarUsuarios, listarUsuarioPorEmail, excluirUsuario };
+    const senhaCriptografada = bcryptjs.hashSync(senha, 10);
+
+    user.senha = senhaCriptografada;
+    await user.save();
+    res.send('Senha atualizada com sucesso.')
+}
+
+export { listarUsuarios, listarUsuarioPorEmail, excluirUsuario, trocarsenha };

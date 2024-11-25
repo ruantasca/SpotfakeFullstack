@@ -7,4 +7,5 @@ const rotasAutenticacao = express.Router();
 rotasAutenticacao.post('/registro', registrarUsuario);
 rotasAutenticacao.post('/login', autenticarUsuario);
 
+
 export { rotasAutenticacao };

@@ -51,14 +51,9 @@ const autenticarUsuario = async (req, res) => {
         "chaveSecretaJWT",
         { expiresIn: 1000 * 60 * 5 }
     );
-
-    if (usuarioExistente.nome === "adm" && usuarioExistente.email === "adm"){
-        res.send('Adm logado')
-    }
-    else{
-            res.send('Usuário autenticado com sucesso!')
-        }
-    
+    res.json({
+        tokenJWT: token
+    })
 };
 
 export { registrarUsuario, autenticarUsuario };

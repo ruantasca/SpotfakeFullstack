@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { Link, router } from 'expo-router';
 import { useFonts } from "expo-font";
+import { LoginContext } from "../scripts/LoginContext";
 
 const LoginScreen = () => {
   //fonte
@@ -11,6 +12,7 @@ const LoginScreen = () => {
   //declarar as funções de emeil e senha que colocamos na caixa de texto
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const { setToken } = useContext(LoginContext)
 
   //ao clicar em logar se der certo ele manda para outra pagina.
   //se der errado ele manda uma mensagem de erro
@@ -28,14 +30,10 @@ const LoginScreen = () => {
         }),
       });
 
-      const message = await response.text();
-      alert(message);
-
-      if (message === "Usuário autenticado com sucesso!") {
+      const data = await response.json();
+      if (response.ok) {
+        setToken(JSON.stringify(data.tokenJWT))
         router.push("/Home")
-      }
-      else if (message === "Adm logado") {
-        router.push("/Admin")
       }
     } catch (error) {
       console.error("Error during login:", error);

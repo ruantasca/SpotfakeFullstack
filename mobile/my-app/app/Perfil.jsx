@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, ScrollView, Pressable, Alert } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import { View, Text, Image, StyleSheet, TextInput, Pressable, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
+import { LoginContext } from "../scripts/LoginContext";
 
 const Perfil = () => {
-    const [nome, setNome] = useState('Seu nome');
-    const [email, setEmail] = useState('seu email');
-    const [senhaAtual, setSenhaAtual] = useState('');
-    const [novaSenha, setNovaSenha] = useState('');
-    const [dataNascimento, setDataNascimento] = useState('sua data de nascimento');
-    const [fotoPerfil, setFotoPerfil] = useState(null);
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const { foto, setFoto } = useContext(LoginContext);
 
     // Carregar informações do AsyncStorage
     useEffect(() => {
         const carregarDados = async () => {
+            const storedEmail = await AsyncStorage.getItem('emailUsuario');
+            if (storedEmail) {
+                setEmail(storedEmail);
+            }
+
             const storedFotoPerfil = await AsyncStorage.getItem('fotoPerfil');
             if (storedFotoPerfil) {
-                setFotoPerfil(storedFotoPerfil);
+                setFoto(storedFotoPerfil);
             }
         };
         carregarDados();
@@ -36,58 +39,34 @@ const Perfil = () => {
             quality: 1,
         });
 
-        if (!result.cancelled) {
+        if (!result.canceled) {
             const fotoUri = result.assets[0].uri;
-            setFotoPerfil(fotoUri);
+            setFoto(fotoUri);
             await AsyncStorage.setItem('fotoPerfil', fotoUri);
         }
     };
 
-    const atualizarNome = async () => {
-        if (!nome) {
-            Alert.alert('Erro', 'Nome não pode estar vazio.');
-            return;
-        }
-
-        try {
-            const response = await fetch('http://localhost:8000/usuarios/update_name', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ nome, email }),
-            });
-
-            if (response.ok) {
-                Alert.alert('Sucesso', 'Nome atualizado com sucesso!');
-            } else {
-                Alert.alert('Erro', 'Não foi possível atualizar o nome.');
-            }
-        } catch (error) {
-            console.error('Erro ao atualizar nome:', error);
-            Alert.alert('Erro', 'Ocorreu um erro ao atualizar o nome.');
-        }
-    };
-
     const atualizarSenha = async () => {
-        if (!senhaAtual || !novaSenha) {
-            Alert.alert('Erro', 'Preencha os campos de senha.');
+        if (!senha) {
+            Alert.alert('Erro', 'Preencha o campo de senha.');
             return;
         }
 
         try {
-            const response = await fetch('http://localhost:8000/usuarios/update_pass', {
+            const response = await fetch('http://localhost:8000/usuarios/trocarsenha', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, senhaAtual, novaSenha }),
+                body: JSON.stringify({ email, senha }),
             });
 
             if (response.ok) {
                 Alert.alert('Sucesso', 'Senha atualizada com sucesso!');
+                setSenha('');
             } else {
-                Alert.alert('Erro', 'Não foi possível atualizar a senha.');
+                const error = await response.json();
+                Alert.alert('Erro', error.message || 'Não foi possível atualizar a senha.');
             }
         } catch (error) {
             console.error('Erro ao atualizar senha:', error);
@@ -98,8 +77,8 @@ const Perfil = () => {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.innerContainer}>
-                {fotoPerfil ? (
-                    <Image source={{ uri: fotoPerfil }} style={styles.fotoPerfil} />
+                {foto ? (
+                    <Image source={{ uri: foto }} style={styles.fotoPerfil} />
                 ) : (
                     <Image source={require('./img/perfil.png')} style={styles.logo} />
                 )}
@@ -109,37 +88,20 @@ const Perfil = () => {
                 </Pressable>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Nome:</Text>
+                    <Text style={styles.label}>Email:</Text>
                     <TextInput
                         style={styles.input}
-                        value={nome}
-                        onChangeText={setNome}
-                        placeholder="Seu nome"
+                        value={email}
+                        editable={false} // O email não pode ser editado
                         placeholderTextColor="#b0b0b0"
-                    />
-                </View>
-
-                <Pressable onPress={atualizarNome} style={styles.botao}>
-                    <Text style={styles.botaoTexto}>Atualizar Nome</Text>
-                </Pressable>
-
-                <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Senha Atual:</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={senhaAtual}
-                        onChangeText={setSenhaAtual}
-                        placeholder="Senha atual"
-                        placeholderTextColor="#b0b0b0"
-                        secureTextEntry
                     />
                 </View>
                 <View style={styles.inputContainer}>
                     <Text style={styles.label}>Nova Senha:</Text>
                     <TextInput
                         style={styles.input}
-                        value={novaSenha}
-                        onChangeText={setNovaSenha}
+                        value={senha}
+                        onChangeText={setSenha}
                         placeholder="Nova senha"
                         placeholderTextColor="#b0b0b0"
                         secureTextEntry

@@ -12,7 +12,7 @@ const HomeScreen = () => {
         
         {/* Botão de Login */}
         <View style={styles.buttonContainer}>
-          <Link href={`http://localhost:8081/Login`} >
+          <Link href={'/Login'} >
             <Pressable style={styles.button}>
               <Text style={styles.buttonText}>Login</Text>
             </Pressable>
