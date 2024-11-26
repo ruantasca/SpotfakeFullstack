@@ -11,12 +11,12 @@ export default function Layout() {
                 headerTintColor: 'white'
             }}>
                 <Stack.Screen name='index' options={{ headerTitle: 'Home' }} />
-                <Stack.Screen name='Pagamento/index' options={{ headerTitle: 'Pagamento' }} />
-                <Stack.Screen name='Registro/index' options={{ headerTitle: 'Registro' }} />
-                <Stack.Screen name='Login/index' options={{ headerTitle: 'Login' }} />
-                <Stack.Screen name='Perfil/index' options={{ headerTitle: 'Perfil' }} />
-                <Stack.Screen name='Admin/index' options={{ headerTitle: 'AdmHome' }} />
-                <Stack.Screen name='Home/index' options={{ headerTitle: 'Home' }} />
+                <Stack.Screen name='Pagamento' options={{ headerTitle: 'Pagamento' }} />
+                <Stack.Screen name='Registro' options={{ headerTitle: 'Registro' }} />
+                <Stack.Screen name='Login' options={{ headerTitle: 'Login' }} />
+                <Stack.Screen name='Perfil' options={{ headerTitle: 'Perfil' }} />
+                <Stack.Screen name='Admin' options={{ headerTitle: 'AdmHome' }} />
+                <Stack.Screen name='Home' options={{ headerTitle: 'Home' }} />
             </Stack>
         </LoginProvider>
     )

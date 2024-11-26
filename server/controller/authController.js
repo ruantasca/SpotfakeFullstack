@@ -2,6 +2,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from '../db.js';
+import { jwtDecode } from "jwt-decode"
 
 const registrarUsuario = async (req, res) => {
     const { nome, sobrenome, email, senha, dataNascimento } = req.body;
@@ -10,7 +11,7 @@ const registrarUsuario = async (req, res) => {
         return;
     }
 
-    const usuarioExistente = await User.findOne({ where: { email } });
+    const usuarioExistente = await User.findOne({ where: { email: email } });
     if (usuarioExistente) {
         res.send('Usuário já existe.');
         return;
@@ -30,7 +31,7 @@ const autenticarUsuario = async (req, res) => {
         return;
     }
 
-    const usuarioExistente = await User.findOne({ where: { email } });
+    const usuarioExistente = await User.findOne({ where: { email: email } });
     if (!usuarioExistente) {
         res.send('Usuário não encontrado.');
         return;
@@ -52,7 +53,8 @@ const autenticarUsuario = async (req, res) => {
         { expiresIn: 1000 * 60 * 5 }
     );
     res.json({
-        tokenJWT: token
+        tokenJWT: token,
+        userData: usuarioExistente
     })
 };
 

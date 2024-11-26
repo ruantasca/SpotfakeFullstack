@@ -1,4 +1,3 @@
-// Controlador de usuário (usuarioController.js)
 import { User } from '../db.js';
 
 const listarUsuarios = async (req, res) => {

@@ -1,34 +1,21 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, Pressable, Alert, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, Image, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { LoginContext } from "../scripts/LoginContext";
+import {jwtDecode} from 'jwt-decode'
 
 const Perfil = () => {
-    const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const { foto, setFoto } = useContext(LoginContext);
+    const {userData, setUserData} = useContext(LoginContext);
 
-    // Carregar informações do AsyncStorage
     useEffect(() => {
-        const carregarDados = async () => {
-            const storedEmail = await AsyncStorage.getItem('emailUsuario');
-            if (storedEmail) {
-                setEmail(storedEmail);
-            }
-
-            const storedFotoPerfil = await AsyncStorage.getItem('fotoPerfil');
-            if (storedFotoPerfil) {
-                setFoto(storedFotoPerfil);
-            }
-        };
-        carregarDados();
+       console.log(userData)
     }, []);
 
     const selecionarFoto = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
-            Alert.alert('Permissão necessária', 'Precisamos de permissão para acessar sua galeria.');
+            alert('Precisamos de permissão para acessar sua galeria.');
             return;
         }
 
@@ -41,14 +28,13 @@ const Perfil = () => {
 
         if (!result.canceled) {
             const fotoUri = result.assets[0].uri;
-            setFoto(fotoUri);
-            await AsyncStorage.setItem('fotoPerfil', fotoUri);
+            setUserData({...fotoUri, foto: fotoUri});
         }
     };
 
     const atualizarSenha = async () => {
         if (!senha) {
-            Alert.alert('Erro', 'Preencha o campo de senha.');
+            alert('Preencha o campo de senha.');
             return;
         }
 
@@ -58,27 +44,27 @@ const Perfil = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, senha }),
+                body: JSON.stringify({ email: userData.email, senha }),
             });
 
             if (response.ok) {
-                Alert.alert('Sucesso', 'Senha atualizada com sucesso!');
+                alert('Senha atualizada com sucesso!');
                 setSenha('');
             } else {
                 const error = await response.json();
-                Alert.alert('Erro', error.message || 'Não foi possível atualizar a senha.');
+                alert('Erro', error.message || 'Não foi possível atualizar a senha.');
             }
         } catch (error) {
             console.error('Erro ao atualizar senha:', error);
-            Alert.alert('Erro', 'Ocorreu um erro ao atualizar a senha.');
+            alert('Ocorreu um erro ao atualizar a senha.');
         }
     };
 
     return (
         <ScrollView style={styles.container}>
             <View style={styles.innerContainer}>
-                {foto ? (
-                    <Image source={{ uri: foto }} style={styles.fotoPerfil} />
+                {userData.foto ? (
+                    <Image source={{ uri: userData.foto }} style={styles.fotoPerfil} />
                 ) : (
                     <Image source={require('./img/perfil.png')} style={styles.logo} />
                 )}
@@ -91,7 +77,7 @@ const Perfil = () => {
                     <Text style={styles.label}>Email:</Text>
                     <TextInput
                         style={styles.input}
-                        value={email}
+                        value={userData.email}
                         editable={false} // O email não pode ser editado
                         placeholderTextColor="#b0b0b0"
                     />

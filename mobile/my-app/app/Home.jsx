@@ -1,56 +1,67 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, TextInput, Image, StyleSheet, Pressable } from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, Pressable, FlatList, ActivityIndicator } from 'react-native';
 import { router, Link } from 'expo-router';
-import { LoginContext } from "../scripts/LoginContext";
-
+import { LoginContext } from '../scripts/LoginContext';
 
 const Home = () => {
-  const { foto } = useContext(LoginContext)
+  const { foto } = useContext(LoginContext);
+  const [artists, setArtists] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    alert(foto)
-  }, )
+  // Função para buscar todos os artistas
+  const fetchArtists = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/artista/');
+      const data = await response.json();
+      console.log(data); // Verificar a estrutura dos dados retornados
+      setArtists(data);
+    } catch (error) {
+      console.error('Erro ao buscar artistas:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   
+  useEffect(() => {
+    fetchArtists();
+  }, []);
 
   return (
     <View style={styles.container}>
-      
       <View style={styles.sidebar}>
-        <Link href={`http://localhost:8081/Perfil`}>
+        <Link href={`/Perfil`}>
           <Pressable>
-          <Image source={{ uri: foto }} style={styles.perfil1}/>
+            <Image source={{ uri: foto }} style={styles.perfil1} />
           </Pressable>
-          </Link>
+        </Link>
       </View>
 
-      
       <View style={styles.mainContent}>
-        
         <View style={styles.searchContainer}>
           <TextInput style={styles.searchInput} placeholder="Search" placeholderTextColor="#AAA" />
           <Pressable style={styles.settingsButton}>
             <Text style={styles.settingsText}>⚙️</Text>
           </Pressable>
-          <Link href={`http://localhost:8081/Perfil`}>
-          
-          <Pressable>
-          <Image source={{ uri: foto }} style={styles.perfil1}/> 
-          </Pressable>
-          </Link>
         </View>
 
-        
         <View style={styles.gridContainer}>
-          <View style={styles.circle}></View>
-          <View style={styles.circle}></View>
-          <View style={styles.circle}></View>
-          
-          <View style={styles.rectangle}></View>
-          <View style={styles.rectangle}></View>
+          {loading ? (
+            <ActivityIndicator size="large" color="#FFF" />
+          ) : (
+            <FlatList
+              data={artists}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.artistCard}>
+                  <Image source={{ uri: item.imageUrl }} style={styles.artistImage} />
+                  <Text style={styles.artistName}>{item.nome}</Text>
+                </View>
+              )}
+            />
+          )}
         </View>
       </View>
 
-      
       <View style={styles.musicPlayer}>
         <Text style={styles.songTitle}>nome</Text>
         <View style={styles.progressBar}></View>
@@ -76,10 +87,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 20,
   },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+  perfil1: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
   },
   mainContent: {
     width: '85%',
@@ -107,22 +118,24 @@ const styles = StyleSheet.create({
   },
   gridContainer: {
     flex: 1,
+  },
+  artistCard: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#3a1c94',
+    borderRadius: 10,
+    marginBottom: 10,
+    padding: 10,
   },
-  circle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#AAA',
-    margin: 10,
+  artistImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
   },
-  rectangle: {
-    width: '45%',
-    height: 100,
-    backgroundColor: '#AAA',
-    margin: 10,
+  artistName: {
+    color: '#FFF',
+    fontSize: 16,
   },
   musicPlayer: {
     position: 'absolute',
@@ -151,16 +164,6 @@ const styles = StyleSheet.create({
   controlButton: {
     fontSize: 20,
     color: '#FFF',
-  },
-  perfil:{
-
-    width: 20,
-    height: 20,
-  },
-  perfil1:{
-
-    width: 60,
-    height: 60,
   },
 });
 
