@@ -4,10 +4,11 @@ import { router, Link } from 'expo-router';
 import { LoginContext } from '../scripts/LoginContext';
 
 const Home = () => {
-  const { foto } = useContext(LoginContext);
+  const { token, setToken, userData, setUserData } = useContext(LoginContext);
   const [artists, setArtists] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  console.log('teste', userData)
   // Função para buscar todos os artistas
   const fetchArtists = async () => {
     try {

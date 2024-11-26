@@ -2,14 +2,13 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TextInput, Pressable, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { LoginContext } from "../scripts/LoginContext";
-import {jwtDecode} from 'jwt-decode'
 
 const Perfil = () => {
     const [senha, setSenha] = useState('');
-    const {userData, setUserData} = useContext(LoginContext);
+    const { token, setToken, userData, setUserData } = useContext(LoginContext);
 
+    console.log(userData)
     useEffect(() => {
-       console.log(userData)
     }, []);
 
     const selecionarFoto = async () => {

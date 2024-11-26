@@ -12,7 +12,7 @@ const LoginScreen = () => {
   //declarar as funções de emeil e senha que colocamos na caixa de texto
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const { setToken, userData, setUserData } = useContext(LoginContext)
+  const { token, setToken, userData, setUserData } = useContext(LoginContext)
 
   //ao clicar em logar se der certo ele manda para outra pagina.
   //se der errado ele manda uma mensagem de erro
@@ -31,10 +31,10 @@ const LoginScreen = () => {
       });
 
       const data = await response.json();
+      console.log(data)
       if (response.ok) {
         setToken(JSON.stringify(data.tokenJWT))
-        setUserData({ ...userData, email: data.email})
-        console.log(userData)
+        setUserData(data.userData)
         router.push("/Home")
       }
     } catch (error) {
