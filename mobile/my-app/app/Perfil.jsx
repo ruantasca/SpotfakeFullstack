@@ -27,7 +27,7 @@ const Perfil = () => {
 
         if (!result.canceled) {
             const fotoUri = result.assets[0].uri;
-            setUserData({...fotoUri, foto: fotoUri});
+            setUserData({...userData, foto: fotoUri});
         }
     };
 
@@ -43,7 +43,7 @@ const Perfil = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email: userData.email, senha }),
+                body: JSON.stringify({ email: userData.email, senha: senha }),
             });
 
             if (response.ok) {
@@ -58,6 +58,24 @@ const Perfil = () => {
             alert('Ocorreu um erro ao atualizar a senha.');
         }
     };
+
+    useEffect(() => {
+        const trocaFoto = async() => {
+            try{
+                const response = await fetch('http://localhost:8000/usuarios/trocarfoto', {
+                    method: 'PUT',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({email: userData.email, alt: userData.foto})
+                })
+                console.log(response)
+            }catch(e){
+                console.log(e)
+            }
+        }
+        trocaFoto()
+    }, [userData.foto])
 
     return (
         <ScrollView style={styles.container}>

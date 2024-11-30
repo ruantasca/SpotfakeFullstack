@@ -40,10 +40,14 @@ const User = sequelize.define('user', {
     cpf: {
         type: Sequelize.DataTypes.STRING,
         allowNull: true,
+    },
+    foto:{
+        type: Sequelize.DataTypes.STRING,
+        allowNull: true,
     }
 })
 
-const Artista = sequelize.define('Artist', {
+const Artista = sequelize.define('artist', {
     nome: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
@@ -59,7 +63,7 @@ const Artista = sequelize.define('Artist', {
 })
 
 
-const Album = sequelize.define('Album', {
+const Album = sequelize.define('album', {
     title: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
@@ -84,13 +88,13 @@ Artista.hasMany(Album, {
     as: 'Albums'
   });
 
-const Musica = sequelize.define('Musica', {
+const Musica = sequelize.define('musica', {
     titulo: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
     },
     duracao: {
-        type: Sequelize.DataTypes.INTEGER,  // Duração em segundos
+        type: Sequelize.DataTypes.INTEGER,  
         allowNull: false,
     },
     fileUrl: {

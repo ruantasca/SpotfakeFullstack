@@ -47,4 +47,18 @@ const excluirUsuario = async (req, res) => {
     res.send('Senha atualizada com sucesso.')
 }
 
-export { listarUsuarios, listarUsuarioPorEmail, excluirUsuario, trocarsenha };
+const fotinha = async(req, res) => {
+    const { email, newfoto } = req.body
+    const user = await User.findOne({where: {email: email}})
+
+    if(!user){
+        res.status(404).send("O usuario nao foi encontrado.")
+        return
+    }
+    User.update({ foto: newfoto },
+        {where: {email: email}} 
+    )
+    res.status(200).send("Usuario editado com sucesso")
+}
+
+export { listarUsuarios, listarUsuarioPorEmail, excluirUsuario, trocarsenha, fotinha };

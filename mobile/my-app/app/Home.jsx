@@ -4,17 +4,16 @@ import { router, Link } from 'expo-router';
 import { LoginContext } from '../scripts/LoginContext';
 
 const Home = () => {
-  const { token, setToken, userData, setUserData } = useContext(LoginContext);
+  const { userData, setUserData } = useContext(LoginContext);
   const [artists, setArtists] = useState([]);
   const [loading, setLoading] = useState(true);
 
   console.log('teste', userData)
-  // Função para buscar todos os artistas
   const fetchArtists = async () => {
     try {
       const response = await fetch('http://localhost:8000/artista/');
       const data = await response.json();
-      console.log(data); // Verificar a estrutura dos dados retornados
+      console.log(data); 
       setArtists(data);
     } catch (error) {
       console.error('Erro ao buscar artistas:', error);
@@ -32,7 +31,7 @@ const Home = () => {
       <View style={styles.sidebar}>
         <Link href={`/Perfil`}>
           <Pressable>
-            <Image source={{ uri: foto }} style={styles.perfil1} />
+            <Image source={{ uri: userData.foto }} style={styles.perfil1} />
           </Pressable>
         </Link>
       </View>

@@ -1,4 +1,3 @@
-// Rotas de autenticação (authRoutes.js)
 import express from "express";
 import { registrarUsuario, autenticarUsuario } from "../controller/authController.js";
 
