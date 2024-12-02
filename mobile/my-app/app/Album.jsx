@@ -1,29 +1,16 @@
-import React, { useContext } from 'react';
-import { View, Text, TextInput, Image, StyleSheet, Pressable, FlatList } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, TextInput, Image, StyleSheet, Pressable, FlatList, ActivityIndicator } from 'react-native';
 import { Link } from 'expo-router';
 import { LoginContext } from '../scripts/LoginContext';
-
-import imagem1 from '../app/img/1.jpg';
-import imagem2 from '../app/img/2.jpg';
-import imagem3 from '../app/img/3.jpg';
-import imagem4 from '../app/img/4.jpg';
-import imagem5 from '../app/img/5.jpg';
-import imagem6 from '../app/img/6.jpg';
-import imagem7 from '../app/img/7.jpg';
-import imagem8 from '../app/img/8.jpg';
 
 const Albums = () => {
   const { userData } = useContext(LoginContext);
 
   const artistas = [
-    { id: 1, nome: 'Artista 1', imagem: imagem1 },
-    { id: 2, nome: 'Artista 2', imagem: imagem2 },
-    { id: 3, nome: 'Artista 3', imagem: imagem3 },
-    { id: 4, nome: 'Artista 4', imagem: imagem4 },
-    { id: 5, nome: 'Artista 5', imagem: imagem5 },
-    { id: 6, nome: 'Artista 6', imagem: imagem6 },
-    { id: 7, nome: 'Artista 7', imagem: imagem7 },
-    { id: 8, nome: 'Artista 8', imagem: imagem8 },
+    { id: 1, nome: 'Artista 1', imagem: './img/1.jpg' },
+    { id: 2, nome: 'Artista 2', imagem: '2.jpg' },
+    { id: 3, nome: 'Artista 3', imagem: '3.jpg' },
+    { id: 4, nome: 'Artista 4', imagem: '4.jpg' },
   ];
 
   return (
@@ -47,7 +34,7 @@ const Albums = () => {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <View style={styles.albumCard}>
-                <Image source={item.imagem} style={styles.albumImage} />
+                <Image source={{ uri: item.imagem }} style={styles.albumImage} />
                 <Text style={styles.albumTitle}>{item.nome}</Text>
               </View>
             )}

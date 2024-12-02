@@ -1,46 +1,45 @@
+import { where } from "sequelize"
+import { Artista, Musica, Album } from "../db.js"
 
-import {Artista, Album, Musica} from '../db.js'
+const getAlbuns = async(req, res) => {
+    const albuns = await Album.findAll()
+    res.status(200).send(albuns)
+}
 
-const pegarTodosAlbums = async (req, res) => {
-  try {
-    const albums = await Album.findAll();
-    return res.status(200).json(albums);
-  } catch (error) {
-    return res.status(500).json({ error: 'Erro ao buscar albums' });
-  }
-};
+const getArtists = async(req, res) => {
+    const artistas = await Artista.findAll()
+    res.status(200).send(artistas)
+}
 
-const pegarAlbumPorId = async (req, res) => {
-  try {
-    const album = await Album.findByPk(req.params.id, {
-      include: [{
-        model: Musica,
-        as: 'Musicas'
-      }]
-    });
-    if (!album) {
-      return res.status(404).json({ error: 'Album não encontrado' });
+const getAlbum = async(req, res) => {
+    const {id} = req.body
+    const album = await Album.findOne({where: {id: id}})
+    if(!album){
+        return res.status(404).send("Album não encontrado")
     }
-    return res.status(200).json(album);
-  } catch (error) {
-    console.log(error)
-    return res.status(500).json({ error: 'Erro ao buscar album' });
-  }
-};
+    const musicas = await Musica.findAll({where: {album_id: id}})
+    res.status(200).send({album: album, musicas: musicas})
+}
 
-const pegarMusicaPeloAlbum = async (req, res) => {
-    try {
-      const musicas = await Musica.findAll({where:{album_id:req.params.id}}
-      );
-      if (!musicas) {
-        return res.status(404).json({ error: 'Album não encontrado' });
-      }
-      return res.status(200).json(musicas);
-    } catch (error) {
-      console.log(error)
-      return res.status(500).json({ error: 'Erro ao buscar albums' });
+const getMusica = async(req, res) => {
+    const {id} = req.body
+    const musica = await Musica.findOne({where: {id: id}})
+    const album = await Album.findOne({where: {id: musica.album_id}}, {attributes: ["coverImageUrl"]})
+    if(!musica){
+        return res.status(404).send("Musica não encontrada")
     }
-  };
+    res.status(200).send({...musica.dataValues, foto: album.coverImageUrl})
+}
 
+const getArtista = async(req, res) => {
+    const {id} = req.body
+    const artista = await Artista.findOne({where: {id: id}})
 
-export {pegarTodosAlbums, pegarAlbumPorId, pegarMusicaPeloAlbum}
+    if(!artista){
+        return res.status(404).send("Artista nao encontrado")
+    }
+
+    const albums = await Album.findAll({where: {artista_id: id}})
+    res.status(200).send({artista, albums})
+}
+export {getAlbum, getArtists, getMusica, getAlbuns, getArtista}

@@ -1,10 +1,12 @@
-import express from 'express'
-import { pegarTodosAlbums, pegarAlbumPorId, pegarMusicaPeloAlbum } from '../controller/albumController';
+import Express from "express"
+import { getAlbum, getAlbuns, getArtists, getMusica, getArtista } from "../controller/AlbumController.js"
 
-const rotas_albums = express.Router();
+const rotasG = Express.Router()
 
-rotas_albums.get('/', pegarTodosAlbums);
-rotas_albums.get('/:id', pegarAlbumPorId); 
-rotas_albums.get('/:id/musicas/', pegarMusicaPeloAlbum);  
+rotasG.get("/getAlbuns", getAlbuns)
+rotasG.get("/getArtistas", getArtists)
+rotasG.post("/getMusica", getMusica)
+rotasG.post("/getAlbum", getAlbum)
+rotasG.post("/getArtista", getArtista)
 
-export {rotas_albums};
+export {rotasG}
